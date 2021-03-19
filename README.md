@@ -22,3 +22,6 @@ This is a generalized Eigenvalue problem (EVP) of the form
 ![equation](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BA%7D%5Chat%7B%5Cphi%7D%20%3D%20i%5Comega%20%5Cmathcal%7BB%7D%5Chat%7B%5Cphi%7D)
 
 of size ![equation](https://latex.codecogs.com/gif.latex?%5BN_x%20%5Ctimes%20N_z%20%5Ctimes%204%5D) and can solved directly or iteratively.
+
+### Publications
+P. Reiter and X. Zhang and R. Stepanov and O. Shishkina, Generation of zonal flows in convective systems by travelling thermal waves, J. Fluid Mech., 913 (2021), A13
