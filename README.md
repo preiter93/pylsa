@@ -1,7 +1,7 @@
 # pylsa
 
 Python code collection to solve the linear stabilty problem arising in convection problems.
-Jupyter Notebooks contain the special case of Rayleigh-Benard convection.
+rbc-1d.py and rbc-2d.py contain the special case of Rayleigh-Benard convection.
 
 ### Theoretical Background
 

@@ -4,12 +4,12 @@ from scipy.sparse.linalg import eigs
 from pylsa.utils import *
 from pylsa.transforms import *
 from pylsa.dmsuite import *
+from pylsa.decorators import *
 import matplotlib.pyplot as plt
 
 #--------------------------------------------------------------------
+@io_decorator
 def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=True):
-    from time import time
-    start = time()
     #----------------------- Parameters ---------------------------
     nu = np.sqrt(Pr/Ra)
     kappa = 1/np.sqrt(Ra*Pr)
@@ -126,9 +126,7 @@ def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=Tru
 
     # Post Process egenvalues
     evals, evecs = sort_evals(evals,evecs,imag=True)
-    evals, evecs = remove_evals(evals,evecs,cut=100)
-    print_evals(evals, n=3)  
-    end = time(); print("Time used: {:8.2f} s.".format(end-start))
+    evals, evecs = remove_evals(evals,evecs,cut=100) 
 
     if plot:
         #plot most unstable mode

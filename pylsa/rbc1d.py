@@ -3,9 +3,11 @@ from scipy.linalg import eig
 from pylsa.utils import *
 from pylsa.transforms import *
 from pylsa.dmsuite import *
+from pylsa.decorators import *
 import matplotlib.pyplot as plt
 
-#--------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------
+@io_decorator
 def solve_rbc1d(Ny=100,Ra=1708,Pr=1,alpha=3.14,plot=True ):
     #----------------------- Parameters ---------------------------
     nu = np.sqrt(Pr/Ra)
@@ -83,7 +85,6 @@ def solve_rbc1d(Ny=100,Ra=1708,Pr=1,alpha=3.14,plot=True ):
         blue = (0/255, 137/255, 204/255)
         red  = (196/255, 0, 96/255)
         yel   = (230/255,159/255,0)
-        print_evals(evals, n=3)
 
         fig,(ax0,ax1,ax2) = plt.subplots(ncols=3, figsize=(8,3)) 
         ax0.set_title("Eigenvalues")
