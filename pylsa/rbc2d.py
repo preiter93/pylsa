@@ -126,7 +126,7 @@ def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=Tru
 
     # Post Process egenvalues
     evals, evecs = sort_evals(evals,evecs,imag=True)
-    evals, evecs = remove_evals(evals,evecs,cut=100) 
+    evals, evecs = remove_evals(evals,evecs,cut=10) 
 
     if plot:
         #plot most unstable mode
