@@ -151,6 +151,8 @@ def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=Tru
         ax[3].title.set_text('v')
         for a in ax:
             a.set_aspect(1)
-        plt.show()
+        figname="rbc2d.png"
+        print("Figure saved to {:}".format(figname))
+        fig.savefig(figname)
 
     return evals, evecs,x,y

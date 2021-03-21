@@ -99,5 +99,9 @@ def solve_rbc1d(Ny=100,Ra=1708,Pr=1,alpha=3.14,plot=True ):
         ax2.set_ylabel("y"); ax2.set_title("Largest Eigenvector")
         ax2.plot(np.abs(evecs[3*N:4*N,-1:]),y,  marker="", color=yel , label=r"$|T|$")
         ax2.legend()
-        plt.tight_layout(); plt.show()
+        plt.tight_layout(); 
+        figname="rbc1d.png"
+        print("Figure saved to {:}".format(figname))
+        fig.savefig(figname)
+        #plt.show()
     return evals,evecs
