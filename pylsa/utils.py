@@ -4,7 +4,7 @@ import numpy as np
 def print_evals(evals,n=None):
     if n is None:n=len(evals)
     print('{:>4s} largest eigenvalues:'.format(str(n)))
-    print('\n'.join('{:4d}: {:10.3e} {:10.3e}j'.format(n-c,np.real(k),np.imag(k)) 
+    print('\n'.join('{:4d}: {:10.4e} {:10.4e}j'.format(n-c,np.real(k),np.imag(k)) 
         for c,k in enumerate(evals[-n:])))
 
 def sort_evals(evals,evecs,imag=False):
