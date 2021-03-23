@@ -24,7 +24,9 @@ This is a generalized Eigenvalue problem (EVP) of the form
 
 ![equation](https://latex.codecogs.com/gif.latex?%5Cmathcal%7BA%7D%5Chat%7B%5Cphi%7D%20%3D%20i%5Comega%20%5Cmathcal%7BB%7D%5Chat%7B%5Cphi%7D)
 
-of size ![equation](https://latex.codecogs.com/gif.latex?%5BN_x%20%5Ctimes%20N_z%20%5Ctimes%204%5D) and can solved directly or iteratively.
+of size ![equation](https://latex.codecogs.com/gif.latex?%5BN_x%20%5Ctimes%20N_z%20%5Ctimes%204%5D) and can be solved directly or iteratively.
+
+In case of an infinite horizontal domain, we can apply the modal ansatz also in the x-direction. Practically, this is simply done by replacing ![equation](https://latex.codecogs.com/gif.latex?D_x%5Crightarrow%20i%5Calpha), thus the dimensionality of the system is reduced and the EVP is of size ![equation](https://latex.codecogs.com/gif.latex?%5B4%5Ctimes%20N_y%5D).
 
 ### Find the neutral curve
 
