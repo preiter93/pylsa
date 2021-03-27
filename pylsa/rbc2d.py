@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 #--------------------------------------------------------------------
 @io_decorator
-def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=True):
+def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, sidewall="adiabatic", 
+    directsolver=False,plot=True):
     #----------------------- Parameters ---------------------------
     nu = Pr
     kappa = 1
@@ -109,7 +110,12 @@ def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=Tru
 
     # T
     bcA = np.argwhere( (np.abs(xi)==0) | (np.abs(xi)==Nx-1) ).flatten() # pos
-    L4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 1.*D1x  ] ])[bcA,:] # neumann
+    if sidewall=="adiabatic":
+        L4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 1.*D1x  ] ])[bcA,:] # neumann
+    elif sidewall=="isothermal":
+        L4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 1.*I    ] ])[bcA,:] # dirichlet
+    else:
+        raise ValueError("Parameter sidewall should be adiabatic or isothermal")
     M4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 0.*I    ] ])[bcA,:]
 
     #----------------------- solve EVP -----------------------------
@@ -162,7 +168,8 @@ def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, directsolver=False,plot=Tru
 
 #--------------------------------------------------------------------
 @io_decorator
-def solve_rbc2d_neutral(Nx=21,Ny=21, Pr=1,aspect=1, directsolver=False,plot=True):
+def solve_rbc2d_neutral(Nx=21,Ny=21, Pr=1,aspect=1, sidewall="adiabatic", 
+    directsolver=False,plot=True):
     #----------------------- Parameters ---------------------------
     nu = Pr
     kappa = 1
@@ -262,7 +269,10 @@ def solve_rbc2d_neutral(Nx=21,Ny=21, Pr=1,aspect=1, directsolver=False,plot=True
 
     # T
     bcA = np.argwhere( (np.abs(xi)==0) | (np.abs(xi)==Nx-1) ).flatten() # pos
-    L4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 1.*D1x  ] ])[bcA,:] # neumann
+    if sidewall=="adiabatic":
+        L4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 1.*D1x  ] ])[bcA,:] # neumann
+    elif sidewall=="isothermal":
+        L4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 1.*I    ] ])[bcA,:] # dirichlet
     M4[bcA,:] = np.block([ [0.*I,  0.*I, 0.*I, 0.*I    ] ])[bcA,:]
 
     #----------------------- solve EVP -----------------------------

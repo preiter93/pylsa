@@ -8,9 +8,9 @@ Ra    = 2.6e3
 Pr    = 1.0
 
 # Find the growth rates for given Ra
-evals,evecs,x,z = solve_rbc2d(Nx=Nx,Ny=Ny,Ra=Ra,Pr=Pr,
-	aspect=Gamma,directsolver=False,plot=True)
+evals,evecs,x,z = solve_rbc2d(Nx=Nx,Ny=Ny,Ra=Ra,Pr=Pr,aspect=Gamma,
+	sidewall="adiabatic",directsolver=False,plot=True)
 
 # Find Rac where the growth rate is zero
-evals,evecs,x,z = solve_rbc2d_neutral(Nx=Nx,Ny=Ny,Pr=Pr,
-	aspect=Gamma,directsolver=False,plot=True)
+evals,evecs,x,z = solve_rbc2d_neutral(Nx=Nx,Ny=Ny,Pr=Pr,aspect=Gamma,
+	sidewall="adiabatic",directsolver=False,plot=True)
