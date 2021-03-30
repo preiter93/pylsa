@@ -7,18 +7,26 @@ def print_evals(evals,n=None):
     print('\n'.join('{:4d}: {:10.4e} {:10.4e}j'.format(n-c,np.real(k),np.imag(k)) 
         for c,k in enumerate(evals[-n:])))
 
-def sort_evals(evals,evecs,imag=False):
-    if imag:
+def sort_evals(evals,evecs,which="M"):
+    assert which in ["M", "I", "R"]
+    if which=="I":
         idx = np.imag(evals).argsort()
-    else:
+    if which=="R":
         idx = np.real(evals).argsort()
+    if which=="M":
+        idx = np.abs(evals).argsort()
     return evals[idx], evecs[:,idx]
 
-def remove_evals(evals,evecs,cut=1000, imag=False):
-    if imag:
-        evecs=evecs[:,np.imag(evals)<=cut]
-        evals=evals[np.imag(evals)<=cut]
-    else:
-        evecs=evecs[:,np.abs(evals)<=cut]
-        evals=evals[np.abs(evals)<=cut]
+def remove_evals(evals,evecs, lower = -np.inf, higher=1000,which="M"):
+    assert which in ["M", "I", "R"]
+    if which=="I":
+        arg = np.where(np.logical_and(lower<=np.imag(evals), 
+            np.imag(evals)<=higher))[0]
+    if which=="R":
+        arg = np.where(np.logical_and(lower<=np.real(evals), 
+            np.real(evals)<=higher))[0]
+    if which=="M":
+        arg = np.where( np.abs(evals)<=higher)[0]
+    evecs=evecs[:,arg]
+    evals=evals[arg]
     return evals,evecs

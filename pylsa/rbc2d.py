@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.linalg import eig
-from scipy.sparse.linalg import eigs
+from scipy.sparse.linalg import eigs, eigsh
 from pylsa.utils import *
 from pylsa.transforms import *
 from pylsa.dmsuite import *
@@ -121,20 +121,27 @@ def solve_rbc2d(Nx=21,Ny=21, Ra=2000, Pr=1,aspect=1, sidewall="adiabatic",
     #----------------------- solve EVP -----------------------------
     L = np.block([ [L1], [L2], [L3], [L4]])
     M = np.block([ [M1], [M2], [M3], [M4]])
-    M = 1.j*M
 
+    np.seterr(divide='ignore', invalid='ignore')
     if (directsolver):
-        evals,evecs = eig(L,M)
-    else:
-        Li = np.linalg.inv(L)
-        evals, evecs = eigs(Li@(M), k=N*SV,sigma=0,which="LI",tol=1e-4, maxiter=2000); #shift and invert
+        evals,evecs = eig(1.j*M,L)
         evals = 1/evals
+    else:
+        # -- Strategie 1 (better) ----
+        evals,evecs = eigs(L,k=5,M=M,sigma=0) #shift and invert
+        evals = evals*-1.0j
+        # -- Strategie 2 ----
+        # Li = np.linalg.inv(L)
+        # evals, evecs = eigs(Li@(M), k=5,sigma=None,
+        # which="LM",tol=1e-4, maxiter=2000);
+        # evals = 1/evals*-1.0j
 
     # Post Process egenvalues
-    evals, evecs = sort_evals(evals,evecs,imag=True)
-    evals, evecs = remove_evals(evals,evecs,cut=10) 
+    evals, evecs = remove_evals(evals,evecs,higher=100,which="M")
+    evals, evecs = sort_evals(evals,evecs,which="I")
+     
 
-    if plot:
+    if plot and evecs.shape[1]!=0:
         #plot most unstable mode
         mode = 1
         N     = Ny*Nx
@@ -278,21 +285,26 @@ def solve_rbc2d_neutral(Nx=21,Ny=21, Pr=1,aspect=1, sidewall="adiabatic",
     #----------------------- solve EVP -----------------------------
     L = np.block([ [L1], [L2], [L3], [L4]])
     M = np.block([ [M1], [M2], [M3], [M4]])
-    M = 1.j*M
 
+    np.seterr(divide='ignore', invalid='ignore')
     if (directsolver):
-        evals,evecs = eig(L,M)
-    else:
-        Li = np.linalg.inv(L)
-        evals, evecs = eigs(Li@(M), k=N*SV,sigma=0,which="LI",tol=1e-4, maxiter=2000); #shift and invert
+        evals,evecs = eig(1.j*M,L)
         evals = 1/evals
+    else:
+        # -- Strategie 1 (better) ----
+        Li = np.linalg.inv(L)
+        evals,evecs = eigs(Li@M,k=5,which="LM")
+        evals = 1/evals*-1.0j
+        # -- Strategie 2 ----
+        #evals,evecs = eigs(M,k=N*SV,M=L,sigma=0.,which="LM")
+        #evals = 1/evals*-1.0j
 
     # Post Process egenvalues
-    evals, evecs = sort_evals(evals,evecs,imag=True)
-    evals, evecs = remove_evals(evals,evecs,cut=1e12) 
+    evals, evecs = remove_evals(evals,evecs,lower=0,higher=1e12,which="I") 
+    evals, evecs = sort_evals(evals,evecs,which="I")
     evals, evecs = evals[::-1], evecs[:,::-1]
 
-    if plot:
+    if plot and evecs.shape[1]!=0:
         #plot most unstable mode
         mode = 1
         N     = Ny*Nx

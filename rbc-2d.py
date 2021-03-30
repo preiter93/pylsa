@@ -2,7 +2,7 @@ from pylsa.rbc2d import solve_rbc2d,solve_rbc2d_neutral
 
 # Parameters
 Gamma = 1.0
-Ny    = 15
+Ny    = 25
 Nx    = int(max(1.0*Ny,Ny*Gamma) )
 Ra    = 2.6e3
 Pr    = 1.0

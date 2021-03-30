@@ -78,8 +78,9 @@ def solve_rbc1d(Ny=100,Ra=1708,Pr=1,alpha=3.14,plot=True ):
     evals,evecs = eig(L,1.j*M)
 
     # Post Process egenvalues
-    evals, evecs = sort_evals(evals,evecs,imag=True)
-    evals, evecs = remove_evals(evals,evecs,cut=400)
+    evals, evecs = remove_evals(evals,evecs,higher=400)
+    evals, evecs = sort_evals(evals,evecs,which="I")
+    
     #--------------------- post-processing -------------------------
     if plot:
         blue = (0/255, 137/255, 204/255)
@@ -181,8 +182,8 @@ def solve_rbc1d_neutral(Ny=100,Pr=1,alpha=3.14,plot=True ):
     evals,evecs = eig(L,1.j*M)
 
     # Post Process egenvalues
-    evals, evecs = sort_evals(evals,evecs,imag=True)
-    evals, evecs = remove_evals(evals,evecs,cut=1e12)
+    evals, evecs = remove_evals(evals,evecs,higher=1e12)
+    evals, evecs = sort_evals(evals,evecs,which="I")
     evals, evecs = evals[::-1], evecs[:,::-1]
     #--------------------- post-processing -------------------------
     if plot:

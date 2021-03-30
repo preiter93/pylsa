@@ -3,8 +3,10 @@ from time import time
 
 def io_decorator(func):
     def wrapper(*args,**kwargs):
+        print("----------------------------")
         print("Input Parameter:")
         for k, v in kwargs.items(): print(k,":", v)
+        print("----------------------------")
         start = time()
         result = func(*args,**kwargs)
         evals = result[0]
