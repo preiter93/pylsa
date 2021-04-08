@@ -36,6 +36,11 @@ A steady state becomes unstable when the eigenvalue of the rhs is zero, then the
 
 where the eigenvalue is now representative for the critical Rayleigh number.
 
+### Dependencies
+numpy
+matplotlib
+scipy
+
 ### Publications
 P. Reiter and X. Zhang and R. Stepanov and O. Shishkina, Generation of zonal flows in convective systems by travelling thermal waves, J. Fluid Mech., 913 (2021), A13
 
