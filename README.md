@@ -44,4 +44,4 @@ scipy
 ### Publications
 P. Reiter and X. Zhang and R. Stepanov and O. Shishkina, Generation of zonal flows in convective systems by travelling thermal waves, J. Fluid Mech., 913 (2021), A13
 
-G. Ahlers, E. Bodenschatz, R. Hartmann, X. He, D. Lohse, P. Reiter, R. Stevens, R. Verzicco, M. Wedi, S. Weiss, X. Zhang, L. Zwirner and O. Shishkina, Aspect ratio dependence of heat transfer in a cylindrical Rayleigh–Benard cell, Europhysics Letters, submitted (2021)
+G. Ahlers, E. Bodenschatz, R. Hartmann, X. He, D. Lohse, P. Reiter, R. Stevens, R. Verzicco, M. Wedi, S. Weiss, X. Zhang, L. Zwirner and O. Shishkina, Aspect ratio dependence of heat transfer in a cylindrical Rayleigh–Benard cell, in preparation (2021)
