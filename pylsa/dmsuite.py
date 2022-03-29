@@ -3,6 +3,7 @@ from scipy.linalg import toeplitz
 
 # -- Full dmsuite for python: https://github.com/labrosse/dmsuite
 
+
 def chebdif(ncheb, mder):
     """
     Calculate differentiation matrices using Chebyshev collocation.
@@ -56,39 +57,39 @@ def chebdif(ncheb, mder):
     """
 
     if mder >= ncheb + 1:
-        raise Exception('number of nodes must be greater than mder')
+        raise Exception("number of nodes must be greater than mder")
 
     if mder <= 0:
-        raise Exception('derivative order must be at least 1')
+        raise Exception("derivative order must be at least 1")
 
     DM = np.zeros((mder, ncheb + 1, ncheb + 1))
     # indices used for flipping trick
     nn1 = np.int(np.floor((ncheb + 1) / 2))
     nn2 = np.int(np.ceil((ncheb + 1) / 2))
-    k = np.arange(ncheb+1)
+    k = np.arange(ncheb + 1)
     # compute theta vector
     th = k * np.pi / ncheb
 
     # Compute the Chebyshev points
 
     # obvious way
-    #x = np.cos(np.pi*np.linspace(ncheb-1,0,ncheb)/(ncheb-1))
+    # x = np.cos(np.pi*np.linspace(ncheb-1,0,ncheb)/(ncheb-1))
     # W&R way
-    x = np.sin(np.pi*(ncheb - 2 * np.linspace(ncheb, 0, ncheb + 1))/(2 * ncheb))
+    x = np.sin(np.pi * (ncheb - 2 * np.linspace(ncheb, 0, ncheb + 1)) / (2 * ncheb))
     x = x[::-1]
 
     # Assemble the differentiation matrices
-    T = np.tile(th/2, (ncheb + 1, 1))
+    T = np.tile(th / 2, (ncheb + 1, 1))
     # trigonometric identity
-    DX = 2*np.sin(T.T+T)*np.sin(T.T-T)
+    DX = 2 * np.sin(T.T + T) * np.sin(T.T - T)
     # flipping trick
     DX[nn1:, :] = -np.flipud(np.fliplr(DX[0:nn2, :]))
     # diagonals of D
-    DX[range(ncheb + 1), range(ncheb + 1)] = 1.
+    DX[range(ncheb + 1), range(ncheb + 1)] = 1.0
     DX = DX.T
 
     # matrix with entries c(k)/c(j)
-    C = toeplitz((-1.)**k)
+    C = toeplitz((-1.0) ** k)
     C[0, :] *= 2
     C[-1, :] *= 2
     C[:, 0] *= 0.5
@@ -97,7 +98,7 @@ def chebdif(ncheb, mder):
     # Z contains entries 1/(x(k)-x(j))
     Z = 1 / DX
     # with zeros on the diagonal.
-    Z[range(ncheb + 1), range(ncheb + 1)] = 0.
+    Z[range(ncheb + 1), range(ncheb + 1)] = 0.0
 
     # initialize differentiation matrices.
     D = np.eye(ncheb + 1)
@@ -111,10 +112,11 @@ def chebdif(ncheb, mder):
         DM[ell, :, :] = D
 
     # return only one differntiation matrix
-    D = DM[mder-1,:,:]
+    D = DM[mder - 1, :, :]
     # mirror x [1,-1] to x [-1,1] (for convenience)
-    x, D = x[::-1], D[::-1,::-1] 
+    x, D = x[::-1], D[::-1, ::-1]
     return x, D
+
 
 def fourdif(nfou, mder):
     """
@@ -141,12 +143,12 @@ def fourdif(nfou, mder):
     by JACW, April 2003.
     """
     # grid points
-    xxt = 2*np.pi*np.arange(nfou)/nfou
+    xxt = 2 * np.pi * np.arange(nfou) / nfou
     # grid spacing
-    dhh = 2*np.pi/nfou
+    dhh = 2 * np.pi / nfou
 
-    nn1 = np.int(np.floor((nfou-1)/2.))
-    nn2 = np.int(np.ceil((nfou-1)/2.))
+    nn1 = np.int(np.floor((nfou - 1) / 2.0))
+    nn2 = np.int(np.ceil((nfou - 1) / 2.0))
     if mder == 0:
         # compute first column of zeroth derivative matrix, which is identity
         col1 = np.zeros(nfou)
@@ -155,41 +157,68 @@ def fourdif(nfou, mder):
 
     elif mder == 1:
         # compute first column of 1st derivative matrix
-        col1 = 0.5*np.array([(-1)**k for k in range(1, nfou)], float)
-        if nfou%2 == 0:
-            topc = 1/np.tan(np.arange(1, nn2+1)*dhh/2)
-            col1 = col1*np.hstack((topc, -np.flipud(topc[0:nn1])))
+        col1 = 0.5 * np.array([(-1) ** k for k in range(1, nfou)], float)
+        if nfou % 2 == 0:
+            topc = 1 / np.tan(np.arange(1, nn2 + 1) * dhh / 2)
+            col1 = col1 * np.hstack((topc, -np.flipud(topc[0:nn1])))
             col1 = np.hstack((0, col1))
         else:
-            topc = 1/np.sin(np.arange(1, nn2+1)*dhh/2)
-            col1 = np.hstack((0, col1*np.hstack((topc, np.flipud(topc[0:nn1])))))
+            topc = 1 / np.sin(np.arange(1, nn2 + 1) * dhh / 2)
+            col1 = np.hstack((0, col1 * np.hstack((topc, np.flipud(topc[0:nn1])))))
         # first row
         row1 = -col1
 
     elif mder == 2:
         # compute first column of 1st derivative matrix
-        col1 = -0.5*np.array([(-1)**k for k in range(1, nfou)], float)
-        if nfou%2 == 0:
-            topc = 1/np.sin(np.arange(1, nn2+1)*dhh/2)**2.
-            col1 = col1*np.hstack((topc, np.flipud(topc[0:nn1])))
-            col1 = np.hstack((-np.pi**2/3/dhh**2-1/6, col1))
+        col1 = -0.5 * np.array([(-1) ** k for k in range(1, nfou)], float)
+        if nfou % 2 == 0:
+            topc = 1 / np.sin(np.arange(1, nn2 + 1) * dhh / 2) ** 2.0
+            col1 = col1 * np.hstack((topc, np.flipud(topc[0:nn1])))
+            col1 = np.hstack((-np.pi ** 2 / 3 / dhh ** 2 - 1 / 6, col1))
         else:
-            topc = 1/np.tan(np.arange(1, nn2+1)*dhh/2)/np.sin(np.arange(1, nn2+1)*dhh/2)
-            col1 = col1*np.hstack((topc, -np.flipud(topc[0:nn1])))
-            col1 = np.hstack(([-np.pi**2/3/dhh**2+1/12], col1))
+            topc = (
+                1
+                / np.tan(np.arange(1, nn2 + 1) * dhh / 2)
+                / np.sin(np.arange(1, nn2 + 1) * dhh / 2)
+            )
+            col1 = col1 * np.hstack((topc, -np.flipud(topc[0:nn1])))
+            col1 = np.hstack(([-np.pi ** 2 / 3 / dhh ** 2 + 1 / 12], col1))
         # first row
         row1 = col1
 
     else:
         # employ FFT to compute 1st column of matrix for mder > 2
-        nfo1 = np.int(np.floor((nfou-1)/2.))
-        nfo2 = -nfou/2*(mder+1)%2*np.ones((nfou+1)%2)
-        mwave = 1j*np.concatenate((np.arange(nfo1+1), nfo2, np.arange(-nfo1, 0)))
-        col1 = np.real(np.fft.ifft(mwave**mder*np.fft.fft(np.hstack(([1], np.zeros(nfou-1))))))
-        if mder%2 == 0:
+        nfo1 = np.int(np.floor((nfou - 1) / 2.0))
+        nfo2 = -nfou / 2 * (mder + 1) % 2 * np.ones((nfou + 1) % 2)
+        mwave = 1j * np.concatenate((np.arange(nfo1 + 1), nfo2, np.arange(-nfo1, 0)))
+        col1 = np.real(
+            np.fft.ifft(
+                mwave ** mder * np.fft.fft(np.hstack(([1], np.zeros(nfou - 1))))
+            )
+        )
+        if mder % 2 == 0:
             row1 = col1
         else:
-            col1 = np.hstack(([0], col1[1:nfou+1]))
+            col1 = np.hstack(([0], col1[1 : nfou + 1]))
             row1 = -col1
     ddm = toeplitz(col1, row1)
-    return xxt,ddm
+    return xxt, ddm
+
+
+def laplacian_fd2(n, length=1):
+    """
+    Finite difference approximation of second order derivative.
+    # Example (n = 3)
+    [-2  1  0]
+    [1  -2  1] * 1/dx**2
+    [0  1  -2]
+    """
+    dx2 = 1.0 / ((length / n) ** 2)
+    lap = np.zeros((n, n))
+    for i in range(n):
+        lap[i, i] = -2.0 * dx2
+        if i > 0:
+            lap[i, i - 1] = 1.0 * dx2
+        if i < n - 1:
+            lap[i, i + 1] = 1.0 * dx2
+    return lap

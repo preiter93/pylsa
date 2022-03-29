@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "..")
+
 from pylsa.rbc2d import solve_rbc2d,solve_rbc2d_neutral
 
 # Parameters
